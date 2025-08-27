@@ -3,41 +3,580 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Calculator</title>
+    <title>50/30/20 Budget Reality Check</title>
     <style>
-        body { margin: 0; padding: 20px; background: #f0f2f5; font-family: Arial, sans-serif; }
-        .budget-calculator { max-width: 700px; margin: 20px auto; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 30px; color: white; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .calculator-header { text-align: center; margin-bottom: 30px; }
-        .calculator-header h2 { font-size: 2.2rem; margin: 0 0 10px 0; font-weight: bold; }
-        .calculator-header p { font-size: 1.1rem; opacity: 0.9; margin: 0; }
-        input { width: 100%; padding: 15px; font-size: 1.1rem; border: none; border-radius: 10px; background: rgba(255,255,255,0.2); color: white; box-sizing: border-box; }
-        input::placeholder { color: rgba(255,255,255,0.7); }
-        button { width: 100%; padding: 18px; background: linear-gradient(45deg, #ff6b6b, #ee5a52); color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin: 20px 0; }
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        
+        .budget-calculator {
+            max-width: 700px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .calculator-header h2 {
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            font-weight: bold;
+        }
+
+        .calculator-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background: rgba(255,255,255,0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .budget-breakdown {
+            display: none;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .budget-breakdown.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .budget-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .budget-label {
+            font-weight: 600;
+        }
+
+        .budget-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .actual-spending {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .actual-spending.show {
+            display: block;
+        }
+
+        .spending-input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        .spending-label {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .spending-input {
+            width: 120px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-align: center;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 20px 0;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(238, 90, 82, 0.3);
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .result-category {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .status-indicator {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-good {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .status-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .category-details {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .overall-assessment {
+            background: linear-gradient(45deg, #2196f3, #21cbf3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .assessment-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .assessment-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .action-steps {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .action-steps h4 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .action-steps ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .action-steps li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .budget-calculator {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .spending-input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .spending-input {
+                width: 100%;
+            }
+            
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="budget-calculator">
         <div class="calculator-header">
-            <h2>50/30/20 Budget Calculator</h2>
-            <p>Enter your monthly income to see your ideal budget breakdown</p>
+            <h2>50/30/20 Budget Reality Check</h2>
+            <p>See how your spending compares to the proven budgeting formula</p>
         </div>
-        <input type="number" id="income" placeholder="Monthly take-home income" oninput="calculate()">
-        <div id="results"></div>
+        
+        <div class="step">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                Enter Your Monthly Take-Home Income
+            </div>
+            <div class="input-group">
+                <input type="number" id="monthly-income" placeholder="e.g., 4500" min="0" oninput="calculateBudget()">
+            </div>
+        </div>
+        
+        <div class="budget-breakdown" id="budget-breakdown">
+            <h3 style="margin-top: 0;">Your Ideal 50/30/20 Budget:</h3>
+            <div class="budget-item">
+                <span class="budget-label">Needs (50%)</span>
+                <span class="budget-amount" id="needs-amount">$0</span>
+            </div>
+            <div class="budget-item">
+                <span class="budget-label">Wants (30%)</span>
+                <span class="budget-amount" id="wants-amount">$0</span>
+            </div>
+            <div class="budget-item">
+                <span class="budget-label">Savings & Investing (20%)</span>
+                <span class="budget-amount" id="savings-amount">$0</span>
+            </div>
+        </div>
+        
+        <div class="actual-spending" id="actual-spending">
+            <div class="step">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    Enter Your Current Monthly Spending
+                </div>
+                
+                <div class="spending-input-group">
+                    <span class="spending-label">Needs (rent, bills, groceries, insurance)</span>
+                    <input type="number" class="spending-input" id="actual-needs" placeholder="0" min="0">
+                </div>
+                
+                <div class="spending-input-group">
+                    <span class="spending-label">Wants (dining out, entertainment, shopping)</span>
+                    <input type="number" class="spending-input" id="actual-wants" placeholder="0" min="0">
+                </div>
+                
+                <div class="spending-input-group">
+                    <span class="spending-label">Savings & Investing</span>
+                    <input type="number" class="spending-input" id="actual-savings" placeholder="0" min="0">
+                </div>
+                
+                <button class="calculate-btn" onclick="analyzeSpending()">
+                    Analyze My Spending
+                </button>
+            </div>
+        </div>
+        
+        <div class="results" id="results">
+            <div id="category-results"></div>
+            <div id="overall-assessment"></div>
+            <div id="action-steps"></div>
+        </div>
     </div>
-    
+
     <script>
-        function calculate() {
-            var income = document.getElementById('income').value;
-            if (income) {
-                var needs = Math.round(income * 0.5);
-                var wants = Math.round(income * 0.3);
-                var savings = Math.round(income * 0.2);
-                document.getElementById('results').innerHTML = 
-                    '<h3>Your 50/30/20 Budget:</h3>' +
-                    '<p>Needs: $' + needs.toLocaleString() + '</p>' +
-                    '<p>Wants: $' + wants.toLocaleString() + '</p>' +
-                    '<p>Savings: $' + savings.toLocaleString() + '</p>';
+        function calculateBudget() {
+            var income = parseFloat(document.getElementById('monthly-income').value) || 0;
+            
+            if (income === 0) {
+                document.getElementById('budget-breakdown').classList.remove('show');
+                document.getElementById('actual-spending').classList.remove('show');
+                return;
             }
+            
+            var needs = Math.round(income * 0.5);
+            var wants = Math.round(income * 0.3);
+            var savings = Math.round(income * 0.2);
+            
+            document.getElementById('needs-amount').textContent = '$' + needs.toLocaleString();
+            document.getElementById('wants-amount').textContent = '$' + wants.toLocaleString();
+            document.getElementById('savings-amount').textContent = '$' + savings.toLocaleString();
+            
+            document.getElementById('budget-breakdown').classList.add('show');
+            setTimeout(function() {
+                document.getElementById('actual-spending').classList.add('show');
+            }, 500);
+        }
+
+        function analyzeSpending() {
+            var income = parseFloat(document.getElementById('monthly-income').value) || 0;
+            var actualNeeds = parseFloat(document.getElementById('actual-needs').value) || 0;
+            var actualWants = parseFloat(document.getElementById('actual-wants').value) || 0;
+            var actualSavings = parseFloat(document.getElementById('actual-savings').value) || 0;
+            
+            if (income === 0) {
+                alert('Please enter your monthly income first!');
+                return;
+            }
+            
+            var idealNeeds = income * 0.5;
+            var idealWants = income * 0.3;
+            var idealSavings = income * 0.2;
+            
+            var needsDiff = actualNeeds - idealNeeds;
+            var wantsDiff = actualWants - idealWants;
+            var savingsDiff = actualSavings - idealSavings;
+            
+            var needsPercent = (actualNeeds / income * 100).toFixed(1);
+            var wantsPercent = (actualWants / income * 100).toFixed(1);
+            var savingsPercent = (actualSavings / income * 100).toFixed(1);
+            
+            var categoryHTML = '';
+            
+            // Needs analysis
+            var needsStatus = Math.abs(needsDiff) <= (income * 0.05) ? 'good' : (needsDiff > 0 ? 'danger' : 'warning');
+            var needsStatusText = needsStatus === 'good' ? 'On Track' : (needsDiff > 0 ? 'Over Budget' : 'Under Budget');
+            var needsMessage = getNeedsMessage(needsDiff, income, needsPercent);
+            
+            categoryHTML += '<div class="result-category">' +
+                '<div class="category-header">' +
+                '<span class="category-name">Needs (' + needsPercent + '%)</span>' +
+                '<span class="status-indicator status-' + needsStatus + '">' + needsStatusText + '</span>' +
+                '</div>' +
+                '<div class="category-details">' + needsMessage + '</div>' +
+                '</div>';
+            
+            // Wants analysis
+            var wantsStatus = Math.abs(wantsDiff) <= (income * 0.05) ? 'good' : (wantsDiff > 0 ? 'warning' : 'good');
+            var wantsStatusText = wantsStatus === 'good' ? (wantsDiff <= 0 ? 'Great Control' : 'On Track') : 'Over Budget';
+            var wantsMessage = getWantsMessage(wantsDiff, income, wantsPercent);
+            
+            categoryHTML += '<div class="result-category">' +
+                '<div class="category-header">' +
+                '<span class="category-name">Wants (' + wantsPercent + '%)</span>' +
+                '<span class="status-indicator status-' + wantsStatus + '">' + wantsStatusText + '</span>' +
+                '</div>' +
+                '<div class="category-details">' + wantsMessage + '</div>' +
+                '</div>';
+            
+            // Savings analysis
+            var savingsStatus = savingsDiff >= 0 ? 'good' : (savingsPercent >= 10 ? 'warning' : 'danger');
+            var savingsStatusText = savingsStatus === 'good' ? 'Excellent' : (savingsStatus === 'warning' ? 'Needs Work' : 'Critical');
+            var savingsMessage = getSavingsMessage(savingsDiff, income, savingsPercent);
+            
+            categoryHTML += '<div class="result-category">' +
+                '<div class="category-header">' +
+                '<span class="category-name">Savings (' + savingsPercent + '%)</span>' +
+                '<span class="status-indicator status-' + savingsStatus + '">' + savingsStatusText + '</span>' +
+                '</div>' +
+                '<div class="category-details">' + savingsMessage + '</div>' +
+                '</div>';
+            
+            document.getElementById('category-results').innerHTML = categoryHTML;
+            
+            // Overall assessment
+            var totalSpending = actualNeeds + actualWants + actualSavings;
+            var assessment = getOverallAssessment(totalSpending, income, savingsPercent, needsPercent);
+            document.getElementById('overall-assessment').innerHTML = assessment;
+            
+            // Action steps
+            var actionSteps = getActionSteps(needsDiff, wantsDiff, savingsDiff, income);
+            document.getElementById('action-steps').innerHTML = actionSteps;
+            
+            document.getElementById('results').classList.add('show');
+        }
+
+        function getNeedsMessage(diff, income, percent) {
+            if (Math.abs(diff) <= (income * 0.05)) {
+                return 'Perfect! Your needs spending is right on target. You\'re allocating ' + percent + '% to essentials, which gives you a solid foundation while leaving room for wants and savings.';
+            } else if (diff > 0) {
+                return 'You\'re spending $' + Math.round(Math.abs(diff)).toLocaleString() + ' more than recommended on needs. At ' + percent + '% of income, this leaves less room for fun and savings. Look for ways to reduce fixed costs like housing, transportation, or subscriptions.';
+            } else {
+                return 'You\'re spending $' + Math.round(Math.abs(diff)).toLocaleString() + ' less than expected on needs. This could mean you\'re being very frugal (great!) or potentially under-investing in important areas like food quality or housing safety.';
+            }
+        }
+
+        function getWantsMessage(diff, income, percent) {
+            if (diff <= 0) {
+                return 'Excellent self-control! You\'re spending ' + percent + '% on wants, which leaves more money for your future. You\'ve mastered the art of distinguishing between needs and wants.';
+            } else if (diff <= (income * 0.1)) {
+                return 'You\'re spending $' + Math.round(diff).toLocaleString() + ' more than recommended on wants (' + percent + '% vs 30%). This is manageable but consider which purchases truly add value to your life.';
+            } else {
+                return 'You\'re overspending on wants by $' + Math.round(diff).toLocaleString() + ' (' + percent + '% of income). This lifestyle inflation is stealing from your future self. Time to distinguish between what you want and what you actually need.';
+            }
+        }
+
+        function getSavingsMessage(diff, income, percent) {
+            if (diff >= 0) {
+                return 'Outstanding! You\'re saving ' + percent + '% of your income, which puts you ahead of 80% of Americans. You\'re building wealth and securing your financial future. Keep this momentum going!';
+            } else if (parseFloat(percent) >= 15) {
+                return 'You\'re saving ' + percent + '% instead of the ideal 20%. You\'re still doing better than most people, but finding an extra $' + Math.round(Math.abs(diff)).toLocaleString() + ' per month could significantly impact your long-term wealth.';
+            } else if (parseFloat(percent) >= 10) {
+                return 'At ' + percent + '% savings rate, you\'re falling short of the 20% target by $' + Math.round(Math.abs(diff)).toLocaleString() + '. This gap could cost you hundreds of thousands in retirement. Your future self needs you to prioritize savings now.';
+            } else {
+                return 'Critical: Only ' + percent + '% savings rate means you\'re not preparing for emergencies or retirement. You\'re missing $' + Math.round(Math.abs(diff)).toLocaleString() + ' monthly that should go to your future. This is the most important area to fix immediately.';
+            }
+        }
+
+        function getOverallAssessment(totalSpending, income, savingsPercent, needsPercent) {
+            var unaccounted = income - totalSpending;
+            var assessment = '';
+            var title = '';
+            
+            if (parseFloat(savingsPercent) >= 18 && parseFloat(needsPercent) <= 55) {
+                title = 'You\'re Crushing It!';
+                assessment = 'Your budget discipline is impressive. You\'re saving for the future while keeping your lifestyle in check. You\'re on the fast track to financial freedom and likely to retire comfortably.';
+            } else if (parseFloat(savingsPercent) >= 10 && parseFloat(needsPercent) <= 60) {
+                title = 'You\'re On The Right Track';
+                assessment = 'You have good financial habits but there\'s room for improvement. With some tweaks to your spending categories, you could accelerate your wealth building significantly.';
+            } else if (parseFloat(savingsPercent) >= 5) {
+                title = 'Warning: Financial Drift';
+                assessment = 'You\'re saving something, which is better than most, but you\'re not building wealth fast enough. Your current trajectory leads to working longer than necessary and financial stress later in life.';
+            } else {
+                title = 'Red Alert: Financial Crisis Mode';
+                assessment = 'Your spending pattern is unsustainable. Without immediate changes, you\'re headed for financial hardship. The good news? Recognizing this now gives you time to turn things around.';
+            }
+            
+            if (Math.abs(unaccounted) > (income * 0.05)) {
+                assessment += ' Note: You have $' + Math.round(Math.abs(unaccounted)).toLocaleString() + ' ' + (unaccounted > 0 ? 'unaccounted for' : 'over your income') + ' - track where this money is really going.';
+            }
+            
+            return '<div class="overall-assessment">' +
+                '<div class="assessment-title">' + title + '</div>' +
+                '<div class="assessment-text">' + assessment + '</div>' +
+                '</div>';
+        }
+
+        function getActionSteps(needsDiff, wantsDiff, savingsDiff, income) {
+            var steps = [];
+            
+            if (savingsDiff < 0) {
+                steps.push('Start paying yourself first - set up automatic savings transfers');
+                if (wantsDiff > income * 0.05) {
+                    steps.push('Cut your \'wants\' spending by 25% and redirect that money to savings');
+                }
+                steps.push('Track every expense for 30 days to find hidden money leaks');
+            }
+            
+            if (needsDiff > income * 0.1) {
+                steps.push('Review your \'needs\' - some might actually be \'wants\' in disguise');
+                steps.push('Negotiate lower rates on insurance, phone, and subscription services');
+            }
+            
+            if (wantsDiff > income * 0.1) {
+                steps.push('Implement a 24-hour rule before any non-essential purchase');
+                steps.push('Find free or low-cost alternatives for entertainment and dining');
+            }
+            
+            steps.push('Review and adjust your budget weekly until it becomes a habit');
+            steps.push('Consider increasing your income through side work or skill development');
+            
+            var stepsHTML = '<div class="action-steps">' +
+                '<h4>Your Next Steps:</h4>' +
+                '<ul>';
+            
+            for (var i = 0; i < steps.length; i++) {
+                stepsHTML += '<li>' + steps[i] + '</li>';
+            }
+            
+            stepsHTML += '</ul></div>';
+            
+            return stepsHTML;
         }
     </script>
 </body>
