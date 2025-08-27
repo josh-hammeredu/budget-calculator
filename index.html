@@ -8,19 +8,20 @@
         body {
             margin: 0;
             padding: 20px;
-            background: #f0f2f5;
+            background: #f7fafcff;
             font-family: Arial, sans-serif;
         }
         
         .budget-calculator {
             max-width: 700px;
             margin: 20px auto;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             border-radius: 20px;
             padding: 30px;
-            color: white;
+            color: #333333;
             font-family: Arial, sans-serif;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
         }
 
         .calculator-header {
@@ -32,12 +33,14 @@
             font-size: 2.2rem;
             margin: 0 0 10px 0;
             font-weight: bold;
+            color: #333333;
         }
 
         .calculator-header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            opacity: 0.8;
             margin: 0;
+            color: #666666;
         }
 
         .step {
@@ -51,10 +54,11 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #333333;
         }
 
         .step-number {
-            background: rgba(255,255,255,0.2);
+            background: #01b85f;
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -63,6 +67,7 @@
             justify-content: center;
             font-size: 0.9rem;
             font-weight: bold;
+            color: white;
         }
 
         .input-group {
@@ -73,30 +78,30 @@
             width: 100%;
             padding: 15px;
             font-size: 1.1rem;
-            border: none;
+            border: 2px solid #e5e5e5;
             border-radius: 10px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            backdrop-filter: blur(10px);
+            background: #ffffff;
+            color: #333333;
             box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
 
         .input-group input::placeholder {
-            color: rgba(255,255,255,0.7);
+            color: #999999;
         }
 
         .input-group input:focus {
             outline: none;
-            background: rgba(255,255,255,0.3);
+            border-color: #01b85f;
         }
 
         .budget-breakdown {
             display: none;
-            background: rgba(255,255,255,0.1);
+            background: #f9f9f9;
             border-radius: 15px;
             padding: 25px;
             margin: 20px 0;
-            backdrop-filter: blur(10px);
+            border: 1px solid #e5e5e5;
         }
 
         .budget-breakdown.show {
@@ -110,18 +115,20 @@
             align-items: center;
             margin-bottom: 15px;
             padding: 15px;
-            background: rgba(255,255,255,0.1);
+            background: #ffffff;
             border-radius: 10px;
+            border: 1px solid #e5e5e5;
         }
 
         .budget-label {
             font-weight: 600;
+            color: #333333;
         }
 
         .budget-amount {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ffeb3b;
+            color: #01b85f;
         }
 
         .actual-spending {
@@ -139,29 +146,36 @@
             align-items: center;
             margin-bottom: 15px;
             padding: 15px;
-            background: rgba(255,255,255,0.05);
+            background: #f9f9f9;
             border-radius: 10px;
+            border: 1px solid #e5e5e5;
         }
 
         .spending-label {
             flex: 1;
             font-weight: 600;
+            color: #333333;
         }
 
         .spending-input {
             width: 120px;
             padding: 10px;
-            border: none;
+            border: 2px solid #e5e5e5;
             border-radius: 8px;
-            background: rgba(255,255,255,0.2);
-            color: white;
+            background: #ffffff;
+            color: #333333;
             text-align: center;
+        }
+
+        .spending-input:focus {
+            outline: none;
+            border-color: #01b85f;
         }
 
         .calculate-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            background: #01b85f;
             color: white;
             border: none;
             border-radius: 12px;
@@ -175,8 +189,9 @@
         }
 
         .calculate-btn:hover {
+            background: #019652;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(238, 90, 82, 0.3);
+            box-shadow: 0 10px 25px rgba(1, 184, 95, 0.3);
         }
 
         .results {
@@ -190,10 +205,11 @@
         }
 
         .result-category {
-            background: rgba(255,255,255,0.1);
+            background: #f9f9f9;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #e5e5e5;
         }
 
         .category-header {
@@ -206,6 +222,7 @@
         .category-name {
             font-size: 1.2rem;
             font-weight: bold;
+            color: #333333;
         }
 
         .status-indicator {
@@ -233,11 +250,11 @@
         .category-details {
             font-size: 0.95rem;
             line-height: 1.4;
-            opacity: 0.9;
+            color: #555555;
         }
 
         .overall-assessment {
-            background: linear-gradient(45deg, #2196f3, #21cbf3);
+            background: #333333;
             border-radius: 15px;
             padding: 25px;
             text-align: center;
@@ -248,23 +265,27 @@
             font-size: 1.4rem;
             font-weight: bold;
             margin-bottom: 15px;
+            color: white;
         }
 
         .assessment-text {
             font-size: 1.1rem;
             line-height: 1.5;
+            color: white;
         }
 
         .action-steps {
-            background: rgba(255,255,255,0.1);
+            background: #f9f9f9;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
+            border: 1px solid #e5e5e5;
         }
 
         .action-steps h4 {
             margin-top: 0;
             font-size: 1.2rem;
+            color: #333333;
         }
 
         .action-steps ul {
@@ -275,6 +296,7 @@
         .action-steps li {
             margin-bottom: 8px;
             line-height: 1.4;
+            color: #555555;
         }
 
         @keyframes slideIn {
@@ -329,7 +351,7 @@
         </div>
         
         <div class="budget-breakdown" id="budget-breakdown">
-            <h3 style="margin-top: 0;">Your Ideal 50/30/20 Budget:</h3>
+            <h3 style="margin-top: 0; color: #333333;">Your Ideal 50/30/20 Budget:</h3>
             <div class="budget-item">
                 <span class="budget-label">Needs (50%)</span>
                 <span class="budget-amount" id="needs-amount">$0</span>
@@ -507,77 +529,4 @@
             } else if (parseFloat(percent) >= 15) {
                 return 'You\'re saving ' + percent + '% instead of the ideal 20%. You\'re still doing better than most people, but finding an extra $' + Math.round(Math.abs(diff)).toLocaleString() + ' per month could significantly impact your long-term wealth.';
             } else if (parseFloat(percent) >= 10) {
-                return 'At ' + percent + '% savings rate, you\'re falling short of the 20% target by $' + Math.round(Math.abs(diff)).toLocaleString() + '. This gap could cost you hundreds of thousands in retirement. Your future self needs you to prioritize savings now.';
-            } else {
-                return 'Critical: Only ' + percent + '% savings rate means you\'re not preparing for emergencies or retirement. You\'re missing $' + Math.round(Math.abs(diff)).toLocaleString() + ' monthly that should go to your future. This is the most important area to fix immediately.';
-            }
-        }
-
-        function getOverallAssessment(totalSpending, income, savingsPercent, needsPercent) {
-            var unaccounted = income - totalSpending;
-            var assessment = '';
-            var title = '';
-            
-            if (parseFloat(savingsPercent) >= 18 && parseFloat(needsPercent) <= 55) {
-                title = 'You\'re Crushing It!';
-                assessment = 'Your budget discipline is impressive. You\'re saving for the future while keeping your lifestyle in check. You\'re on the fast track to financial freedom and likely to retire comfortably.';
-            } else if (parseFloat(savingsPercent) >= 10 && parseFloat(needsPercent) <= 60) {
-                title = 'You\'re On The Right Track';
-                assessment = 'You have good financial habits but there\'s room for improvement. With some tweaks to your spending categories, you could accelerate your wealth building significantly.';
-            } else if (parseFloat(savingsPercent) >= 5) {
-                title = 'Warning: Financial Drift';
-                assessment = 'You\'re saving something, which is better than most, but you\'re not building wealth fast enough. Your current trajectory leads to working longer than necessary and financial stress later in life.';
-            } else {
-                title = 'Red Alert: Financial Crisis Mode';
-                assessment = 'Your spending pattern is unsustainable. Without immediate changes, you\'re headed for financial hardship. The good news? Recognizing this now gives you time to turn things around.';
-            }
-            
-            if (Math.abs(unaccounted) > (income * 0.05)) {
-                assessment += ' Note: You have $' + Math.round(Math.abs(unaccounted)).toLocaleString() + ' ' + (unaccounted > 0 ? 'unaccounted for' : 'over your income') + ' - track where this money is really going.';
-            }
-            
-            return '<div class="overall-assessment">' +
-                '<div class="assessment-title">' + title + '</div>' +
-                '<div class="assessment-text">' + assessment + '</div>' +
-                '</div>';
-        }
-
-        function getActionSteps(needsDiff, wantsDiff, savingsDiff, income) {
-            var steps = [];
-            
-            if (savingsDiff < 0) {
-                steps.push('Start paying yourself first - set up automatic savings transfers');
-                if (wantsDiff > income * 0.05) {
-                    steps.push('Cut your \'wants\' spending by 25% and redirect that money to savings');
-                }
-                steps.push('Track every expense for 30 days to find hidden money leaks');
-            }
-            
-            if (needsDiff > income * 0.1) {
-                steps.push('Review your \'needs\' - some might actually be \'wants\' in disguise');
-                steps.push('Negotiate lower rates on insurance, phone, and subscription services');
-            }
-            
-            if (wantsDiff > income * 0.1) {
-                steps.push('Implement a 24-hour rule before any non-essential purchase');
-                steps.push('Find free or low-cost alternatives for entertainment and dining');
-            }
-            
-            steps.push('Review and adjust your budget weekly until it becomes a habit');
-            steps.push('Consider increasing your income through side work or skill development');
-            
-            var stepsHTML = '<div class="action-steps">' +
-                '<h4>Your Next Steps:</h4>' +
-                '<ul>';
-            
-            for (var i = 0; i < steps.length; i++) {
-                stepsHTML += '<li>' + steps[i] + '</li>';
-            }
-            
-            stepsHTML += '</ul></div>';
-            
-            return stepsHTML;
-        }
-    </script>
-</body>
-</html>
+                return 'At ' + percent + '% savings rate, you\'re falling short of the 20% target by $' + Math.round(Math.abs(diff)).toLocaleString() + '. This gap could cost you hundreds of thousands in
