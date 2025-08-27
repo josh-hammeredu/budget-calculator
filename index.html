@@ -529,4 +529,77 @@
             } else if (parseFloat(percent) >= 15) {
                 return 'You\'re saving ' + percent + '% instead of the ideal 20%. You\'re still doing better than most people, but finding an extra $' + Math.round(Math.abs(diff)).toLocaleString() + ' per month could significantly impact your long-term wealth.';
             } else if (parseFloat(percent) >= 10) {
-                return 'At ' + percent + '% savings rate, you\'re falling short of the 20% target by $' + Math.round(Math.abs(diff)).toLocaleString() + '. This gap could cost you hundreds of thousands in
+                return 'At ' + percent + '% savings rate, you\'re falling short of the 20% target by $' + Math.round(Math.abs(diff)).toLocaleString() + '. This gap could cost you hundreds of thousands in retirement. Your future self needs you to prioritize savings now.';
+            } else {
+                return 'Critical: Only ' + percent + '% savings rate means you\'re not preparing for emergencies or retirement. You\'re missing $' + Math.round(Math.abs(diff)).toLocaleString() + ' monthly that should go to your future. This is the most important area to fix immediately.';
+            }
+        }
+
+        function getOverallAssessment(totalSpending, income, savingsPercent, needsPercent) {
+            var unaccounted = income - totalSpending;
+            var assessment = '';
+            var title = '';
+            
+            if (parseFloat(savingsPercent) >= 18 && parseFloat(needsPercent) <= 55) {
+                title = 'You\'re Crushing It!';
+                assessment = 'Your budget discipline is impressive. You\'re saving for the future while keeping your lifestyle in check. You\'re on the fast track to financial freedom and likely to retire comfortably.';
+            } else if (parseFloat(savingsPercent) >= 10 && parseFloat(needsPercent) <= 60) {
+                title = 'You\'re On The Right Track';
+                assessment = 'You have good financial habits but there\'s room for improvement. With some tweaks to your spending categories, you could accelerate your wealth building significantly.';
+            } else if (parseFloat(savingsPercent) >= 5) {
+                title = 'Warning: Financial Drift';
+                assessment = 'You\'re saving something, which is better than most, but you\'re not building wealth fast enough. Your current trajectory leads to working longer than necessary and financial stress later in life.';
+            } else {
+                title = 'Red Alert: Financial Crisis Mode';
+                assessment = 'Your spending pattern is unsustainable. Without immediate changes, you\'re headed for financial hardship. The good news? Recognizing this now gives you time to turn things around.';
+            }
+            
+            if (Math.abs(unaccounted) > (income * 0.05)) {
+                assessment += ' Note: You have $' + Math.round(Math.abs(unaccounted)).toLocaleString() + ' ' + (unaccounted > 0 ? 'unaccounted for' : 'over your income') + ' - track where this money is really going.';
+            }
+            
+            return '<div class="overall-assessment">' +
+                '<div class="assessment-title">' + title + '</div>' +
+                '<div class="assessment-text">' + assessment + '</div>' +
+                '</div>';
+        }
+
+        function getActionSteps(needsDiff, wantsDiff, savingsDiff, income) {
+            var steps = [];
+            
+            if (savingsDiff < 0) {
+                steps.push('Start paying yourself first - set up automatic savings transfers');
+                if (wantsDiff > income * 0.05) {
+                    steps.push('Cut your \'wants\' spending by 25% and redirect that money to savings');
+                }
+                steps.push('Track every expense for 30 days to find hidden money leaks');
+            }
+            
+            if (needsDiff > income * 0.1) {
+                steps.push('Review your \'needs\' - some might actually be \'wants\' in disguise');
+                steps.push('Negotiate lower rates on insurance, phone, and subscription services');
+            }
+            
+            if (wantsDiff > income * 0.1) {
+                steps.push('Implement a 24-hour rule before any non-essential purchase');
+                steps.push('Find free or low-cost alternatives for entertainment and dining');
+            }
+            
+            steps.push('Review and adjust your budget weekly until it becomes a habit');
+            steps.push('Consider increasing your income through side work or skill development');
+            
+            var stepsHTML = '<div class="action-steps">' +
+                '<h4>Your Next Steps:</h4>' +
+                '<ul>';
+            
+            for (var i = 0; i < steps.length; i++) {
+                stepsHTML += '<li>' + steps[i] + '</li>';
+            }
+            
+            stepsHTML += '</ul></div>';
+            
+            return stepsHTML;
+        }
+    </script>
+</body>
+</html>
