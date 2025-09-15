@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are You Average? Financial Reality Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f7fafcff 0%, #ffffff 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #222;
+            font-weight: 900;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .caleb-quote {
+            background: linear-gradient(135deg, #01b85f, #00a04d);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            border-left: 5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(1, 184, 95, 0.2);
+        }
+
+        .caleb-quote::before {
+            content: '"';
+            font-size: 2.5em;
+            position: absolute;
+            top: -5px;
+            left: 10px;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .caleb-signature {
+            text-align: right;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 12px;
+            opacity: 0.9;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .warning h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #01b85f;
+            box-shadow: 0 0 0 3px rgba(1, 184, 95, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #01b85f, #00a04d);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(1, 184, 95, 0.3);
+        }
+
+        .calculate-btn:hover {
+            background: linear-gradient(135deg, #00a04d, #019652);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(1, 184, 95, 0.4);
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .overall-score {
+            text-align: center;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(44, 62, 80, 0.3);
+        }
+
+        .score-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .score-description {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .comparison-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .comparison-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .comparison-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .comparison-status {
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-good {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-poor {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 1.5s ease-out;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .progress-excellent {
+            background: linear-gradient(45deg, #01b85f, #28a745);
+        }
+
+        .progress-good {
+            background: linear-gradient(45deg, #17a2b8, #20c997);
+        }
+
+        .progress-warning {
+            background: linear-gradient(45deg, #ffc107, #fd7e14);
+        }
+
+        .progress-poor {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+        }
+
+        .comparison-values {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-value {
+            color: #01b85f;
+        }
+
+        .benchmark-value {
+            color: #666;
+        }
+
+        .comparison-details {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #01b85f, #00a04d);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(1, 184, 95, 0.3);
+        }
+
+        .rec-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .rec-section {
+            margin-bottom: 30px;
+        }
+
+        .rec-section h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .rec-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rec-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .rec-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .caleb-reality {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .data-sources {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid #e9ecef;
+        }
+
+        .data-sources h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .data-sources ul {
+            list-style: disc;
+            margin-left: 25px;
+        }
+
+        .data-sources li {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-value {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Are You Average?</h1>
+            <p>Financial Reality Checker</p>
+        </div>
+
+        <div class="caleb-quote">
+            Most people think they're doing fine financially until they actually run the numbers. Let's see where you really stand.
+            <div class="caleb-signature">- Caleb Hammer</div>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Fair Warning: This Gets Real</h3>
+            <p><strong>I'm going to show you exactly where you stand financially.</strong> No sugar-coating, no participation trophies. Just the honest truth about your financial situation compared to your peers. Ready?</p>
+        </div>
+
+        <div class="form-section">
+            <h3>📊 Your Financial Snapshot</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="age">Your Age</label>
+                    <input type="number" id="age" placeholder="30" min="18" max="100">
+                </div>
+                
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state">
+                        <option value="national">National Average</option>
+                        <option value="CA">California</option>
+                        <option value="NY">New York</option>
+                        <option value="TX">Texas</option>
+                        <option value="FL">Florida</option>
+                        <option value="IL">Illinois</option>
+                        <option value="WA">Washington</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="income">Annual Household Income (before taxes)</label>
+                <input type="number" id="income" placeholder="75000" min="0">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="savings">Total Savings & Investments</label>
+                    <input type="number" id="savings" placeholder="25000" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="emergency">Emergency Fund Only</label>
+                    <input type="number" id="emergency" placeholder="8000" min="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="debt">Total Debt (credit cards, loans, mortgage)</label>
+                <input type="number" id="debt" placeholder="35000" min="0">
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateResults()">
+            Show Me The Brutal Truth
+        </button>
+
+        <div class="results" id="results">
+            <div class="overall-score" id="overall-score">
+                <div class="score-title">Your Financial Percentile</div>
+                <div class="score-value" id="percentile-score">0th</div>
+                <div class="score-description" id="score-description"></div>
+            </div>
+
+            <div class="comparison-grid" id="comparison-grid">
+                <!-- Comparison items will be inserted here -->
+            </div>
+
+            <div class="recommendations" id="recommendations">
+                <div class="rec-title" id="rec-title"></div>
+                <div id="rec-content"></div>
+            </div>
+        </div>
+
+        <div class="data-sources">
+            <h3>Data Sources</h3>
+            <ul>
+                <li><strong>Federal Reserve Survey of Consumer Finances (2022)</strong> - Net worth and savings data</li>
+                <li><strong>U.S. Census Bureau American Community Survey</strong> - Income statistics by age and location</li>
+                <li><strong>Bureau of Labor Statistics Consumer Expenditure Survey</strong> - Spending patterns</li>
+                <li><strong>Master Your Budget methodology</strong> - Financial benchmarks and recommendations</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Financial benchmarks based on real data
+        const financialData = {
+            national: {
+                medianIncome: 70784,
+                medianSavings: 8000,
+                averageSavings: 41600,
+                averageDebt: 38000,
+                costOfLiving: 1.0,
+                name: "National"
+            },
+            CA: {
+                medianIncome: 91550,
+                medianSavings: 12500,
+                averageSavings: 67200,
+                averageDebt: 52000,
+                costOfLiving: 1.38,
+                name: "California"
+            },
+            NY: {
+                medianIncome: 88420,
+                medianSavings: 11800,
+                averageSavings: 58900,
+                averageDebt: 48500,
+                costOfLiving: 1.32,
+                name: "New York"
+            },
+            TX: {
+                medianIncome: 73450,
+                medianSavings: 7600,
+                averageSavings: 38200,
+                averageDebt: 34800,
+                costOfLiving: 0.93,
+                name: "Texas"
+            },
+            FL: {
+                medianIncome: 67917,
+                medianSavings: 6900,
+                averageSavings: 35400,
+                averageDebt: 32100,
+                costOfLiving: 0.98,
+                name: "Florida"
+            },
+            IL: {
+                medianIncome: 78433,
+                medianSavings: 8900,
+                averageSavings: 43200,
+                averageDebt: 39600,
+                costOfLiving: 1.05,
+                name: "Illinois"
+            },
+            WA: {
+                medianIncome: 84247,
+                medianSavings: 10200,
+                averageSavings: 51800,
+                averageDebt: 42300,
+                costOfLiving: 1.15,
+                name: "Washington"
+            },
+            other: {
+                medianIncome: 70784,
+                medianSavings: 8000,
+                averageSavings: 41600,
+                averageDebt: 38000,
+                costOfLiving: 1.0,
+                name: "Your State"
+            }
+        };
+
+        const emergencyTarget = 6; // months of expenses
+        const savingsRateTarget = 0.20; // 20%
+        const debtToIncomeTarget = 0.36; // 36%
+
+        // Age-based savings targets (simplified from financial planning rules)
+        const ageBasedSavings = {
+            25: 20000,
+            30: 50000,
+            35: 90000,
+            40: 150000,
+            45: 225000,
+            50: 325000,
+            55: 450000,
+            60: 600000,
+            65: 750000
+        };
+
+        function getAgeBasedTarget(age) {
+            const ages = Object.keys(ageBasedSavings).map(Number);
+            const closestAge = ages.reduce((prev, curr) => 
+                Math.abs(curr - age) < Math.abs(prev - age) ? curr : prev
+            );
+            return ageBasedSavings[closestAge];
+        }
+
+        function calculatePercentile(value, median, average) {
+            if (value >= average) return Math.min(95, 60 + (value - average) / average * 35);
+            if (value >= median) return 50 + (value - median) / (average - median) * 10;
+            return Math.max(5, value / median * 50);
+        }
+
+        function getStateData(state) {
+            return financialData[state] || financialData.national;
+        }
+
+        function adjustForCostOfLiving(amount, costOfLiving) {
+            return amount / costOfLiving;
+        }
+
+        function getStatusClass(percentile) {
+            if (percentile >= 75) return 'excellent';
+            if (percentile >= 50) return 'good';
+            if (percentile >= 25) return 'warning';
+            return 'poor';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function calculateResults() {
+            const age = parseInt(document.getElementById('age').value);
+            const income = parseInt(document.getElementById('income').value);
+            const savings = parseInt(document.getElementById('savings').value) || 0;
+            const debt = parseInt(document.getElementById('debt').value) || 0;
+            const emergency = parseInt(document.getElementById('emergency').value) || 0;
+            const selectedState = document.getElementById('state').value || 'national';
+
+            if (!age || !income) {
+                alert('Please fill in your age and income at minimum.');
+                return;
+            }
+
+            // Get state-specific data
+            const stateData = getStateData(selectedState);
+            
+            // Calculate key metrics with cost of living adjustments
+            const monthlyIncome = income / 12;
+            const monthlyExpenses = monthlyIncome * 0.7; // Rough estimate
+            const debtToIncome = debt / income;
+            const savingsRate = savings / income;
+            const emergencyMonths = emergency / monthlyExpenses;
+            const ageTarget = getAgeBasedTarget(age);
+            const netWorth = savings - debt;
+
+            // Adjust user values for cost of living comparison
+            const adjustedIncome = adjustForCostOfLiving(income, stateData.costOfLiving);
+            const adjustedSavings = adjustForCostOfLiving(savings, stateData.costOfLiving);
+            const adjustedDebt = adjustForCostOfLiving(debt, stateData.costOfLiving);
+
+            // Calculate percentiles using state-specific data
+            const savingsPercentile = calculatePercentile(adjustedSavings, stateData.medianSavings, stateData.averageSavings);
+            const incomePercentile = calculatePercentile(adjustedIncome, stateData.medianIncome, stateData.medianIncome * 1.4);
+            const debtPercentile = debt > 0 ? Math.max(5, 100 - calculatePercentile(adjustedDebt, stateData.averageDebt * 0.7, stateData.averageDebt)) : 95;
+            const emergencyPercentile = calculatePercentile(emergencyMonths, 1, 6);
+
+            const overallPercentile = Math.round((savingsPercentile + incomePercentile + debtPercentile + emergencyPercentile) / 4);
+
+            // Display results
+            displayOverallScore(overallPercentile, stateData);
+            displayComparisons(income, savings, debt, emergency, netWorth, emergencyMonths, debtToIncome, ageTarget, savingsPercentile, incomePercentile, debtPercentile, emergencyPercentile, stateData);
+            displayRecommendations(overallPercentile, income, savings, debt, emergency, age, netWorth, stateData);
+
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayOverallScore(percentile, stateData) {
+            const scoreElement = document.getElementById('percentile-score');
+            const descElement = document.getElementById('score-description');
+            const overallElement = document.getElementById('overall-score');
+
+            scoreElement.textContent = percentile + 'th';
+            
+            const isNationalData = stateData.name === 'National' || stateData.name === 'Your State';
+            const stateContext = isNationalData ? ' nationally' : ' in ' + stateData.name;
+            const costOfLivingNote = !isNationalData && stateData.costOfLiving !== 1.0 ? 
+                ' (Cost of living in ' + stateData.name + ' is ' + 
+                (stateData.costOfLiving > 1 ? Math.round((stateData.costOfLiving - 1) * 100) + '% higher' : 
+                 Math.round((1 - stateData.costOfLiving) * 100) + '% lower') + 
+                ' than national average)' : '';
+            
+            if (percentile >= 80) {
+                descElement.innerHTML = '🎉 Holy crap, you\'re crushing it! You\'re ahead of ' + percentile + '% of people' + stateContext + '. Keep this momentum going and don\'t let lifestyle creep destroy what you\'ve built.' + costOfLivingNote;
+                overallElement.style.background = 'linear-gradient(45deg, #01b85f, #28a745)';
+            } else if (percentile >= 60) {
+                descElement.innerHTML = '👍 You\'re doing better than most' + stateContext + ', but don\'t get comfortable. You\'re ahead of ' + percentile + '% of your peers, but there\'s still work to do to reach true financial freedom.' + costOfLivingNote;
+                overallElement.style.background = 'linear-gradient(45deg, #17a2b8, #20c997)';
+            } else if (percentile >= 40) {
+                descElement.innerHTML = '⚠️ You\'re... average' + stateContext + '. In America, that\'s not good enough if you want financial freedom. ' + (100 - percentile) + '% of people in your area are doing better than you financially.' + costOfLivingNote;
+                overallElement.style.background = 'linear-gradient(45deg, #ffc107, #fd7e14)';
+            } else {
+                descElement.innerHTML = '🚨 Let\'s be brutally honest - you\'re behind where you need to be' + stateContext + '. ' + (100 - percentile) + '% of people in your area have better finances. But here\'s the thing - I\'ve seen people turn this around completely.' + costOfLivingNote;
+                overallElement.style.background = 'linear-gradient(45deg, #dc3545, #c82333)';
+            }
+        }
+
+        function displayComparisons(income, savings, debt, emergency, netWorth, emergencyMonths, debtToIncome, ageTarget, savingsP, incomeP, debtP, emergencyP, stateData) {
+            const isNationalData = stateData.name === 'National' || stateData.name === 'Your State';
+            const contextLabel = isNationalData ? 'national average' : stateData.name + ' average';
+            const contextPhrase = isNationalData ? 'nationally' : 'in ' + stateData.name;
+            
+            const comparisons = [
+                {
+                    title: '💰 Total Savings & Investments',
+                    userValue: formatCurrency(savings),
+                    benchmark: formatCurrency(stateData.averageSavings),
+                    percentile: savingsP,
+                    details: savings > stateData.averageSavings ? 
+                        'You have ' + formatCurrency(savings - stateData.averageSavings) + ' more than the average person ' + contextPhrase + '. You\'re building real wealth.' :
+                        'You need ' + formatCurrency(stateData.averageSavings - savings) + ' more to reach average savings ' + contextPhrase + '. Every dollar counts.',
+                    stateContext: 'vs ' + contextLabel
+                },
+                {
+                    title: '💸 Emergency Fund Coverage',
+                    userValue: emergencyMonths.toFixed(1) + ' months',
+                    benchmark: '6 months (recommended)',
+                    percentile: emergencyP,
+                    details: emergencyMonths >= 6 ? 
+                        'Excellent! You can survive a major financial emergency without going into debt.' :
+                        emergencyMonths >= 1 ?
+                            'You have a start, but need ' + formatCurrency((6 - emergencyMonths) * (income/12) * 0.7) + ' more for full protection based on your income level.' :
+                            'URGENT: You\'re one emergency away from debt. Build $1,000 immediately, then work toward 6 months of expenses.',
+                    stateContext: 'universal recommendation'
+                },
+                {
+                    title: '💳 Total Debt Burden',
+                    userValue: formatCurrency(debt),
+                    benchmark: formatCurrency(stateData.averageDebt),
+                    percentile: debtP,
+                    details: debt === 0 ?
+                        'Debt-free! You\'re crushing it. This puts you ahead of most people ' + contextPhrase + '.' :
+                        debt < stateData.averageDebt ? 
+                            'You have ' + formatCurrency(stateData.averageDebt - debt) + ' less debt than average ' + contextPhrase + '. Stay focused on paying it off.' :
+                            'You have ' + formatCurrency(debt - stateData.averageDebt) + ' more debt than average ' + contextPhrase + '. This is holding you back from building wealth.',
+                    stateContext: 'vs ' + contextLabel
+                },
+                {
+                    title: '💼 Annual Income Level',
+                    userValue: formatCurrency(income),
+                    benchmark: formatCurrency(stateData.medianIncome),
+                    percentile: incomeP,
+                    details: income > stateData.medianIncome ? 
+                        'You earn ' + formatCurrency(income - stateData.medianIncome) + ' more than the median income ' + contextPhrase + '. Use this advantage to build wealth faster.' :
+                        income < stateData.medianIncome * 0.8 ?
+                            'Your income is significantly below the median ' + contextPhrase + ' of ' + formatCurrency(stateData.medianIncome) + '. Consider income optimization strategies.' :
+                            'Your income is close to the median ' + contextPhrase + '. Focus on optimizing your savings rate and debt elimination.',
+                    stateContext: 'vs ' + (isNationalData ? 'national median' : stateData.name + ' median')
+                }
+            ];
+
+            const grid = document.getElementById('comparison-grid');
+            grid.innerHTML = '';
+
+            comparisons.forEach(comp => {
+                const status = getStatusClass(comp.percentile);
+                const item = document.createElement('div');
+                item.className = 'comparison-item';
+                item.innerHTML = 
+                    '<div class="comparison-header">' +
+                        '<div class="comparison-title">' + comp.title + '</div>' +
+                        '<div class="comparison-status status-' + status + '">' +
+                            Math.round(comp.percentile) + 'th percentile' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="progress-container">' +
+                        '<div class="progress-bar">' +
+                            '<div class="progress-fill progress-' + status + '" ' +
+                                 'style="width: ' + Math.min(comp.percentile, 100) + '%"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="comparison-values">' +
+                        '<span class="user-value">You: ' + comp.userValue + '</span>' +
+                        '<span class="benchmark-value">Benchmark: ' + comp.benchmark + '</span>' +
+                    '</div>' +
+                    '<div style="text-align: center; font-size: 0.9em; color: #666; margin: 5px 0;">' +
+                        comp.stateContext +
+                    '</div>' +
+                    '<div class="comparison-details">' + comp.details + '</div>';
+                
+                grid.appendChild(item);
+            });
+        }
+
+        function displayRecommendations(percentile, income, savings, debt, emergency, age, netWorth, stateData) {
+            const title = document.getElementById('rec-title');
+            const content = document.getElementById('rec-content');
+
+            const stateContext = stateData.name !== 'National' ? ' in ' + stateData.name : '';
+            const costNote = stateData.costOfLiving > 1.2 ? 
+                ' Living in ' + stateData.name + ' means higher costs, so you need to be even more aggressive with savings and income optimization.' :
+                stateData.costOfLiving < 0.9 ? 
+                    ' Living in ' + stateData.name + ' gives you a cost advantage - use it to save more aggressively than your peers.' : '';
+
+            if (percentile >= 75) {
+                title.textContent = 'You\'re Crushing It' + stateContext + ' - Level Up Further';
+                content.innerHTML = 
+                    '<div class="rec-section">' +
+                        '<h4>🚀 Your Next Level Moves:</h4>' +
+                        '<ul class="rec-list">' +
+                            '<li>Increase your savings rate to 25%+ to build serious wealth</li>' +
+                            '<li>Max out tax-advantaged accounts (401k, IRA, HSA)</li>' +
+                            '<li>Consider real estate or other investment diversification</li>' +
+                            '<li>Start building multiple income streams</li>' +
+                            '<li>Plan for early retirement or financial independence</li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<div class="caleb-reality">' +
+                        '<strong>Caleb\'s Take:</strong> You\'ve escaped the average American trap' + stateContext + '. Now it\'s about optimization and acceleration. Don\'t get complacent - this is where you separate yourself from the pack permanently.' + costNote +
+                    '</div>';
+            } else if (percentile >= 50) {
+                title.textContent = 'Above Average' + stateContext + ' But Room to Grow';
+                content.innerHTML = 
+                    '<div class="rec-section">' +
+                        '<h4>🎯 Priority Actions (Master Your Budget Approach):</h4>' +
+                        '<ul class="rec-list">' +
+                            '<li>Build emergency fund to 6 months of expenses - this is non-negotiable</li>' +
+                            '<li>Follow the 50/30/20 rule: 50% needs, 30% wants, 20% savings/investments</li>' +
+                            '<li>Track every dollar using the 4-step budgeting process</li>' +
+                            '<li>Pay off high-interest debt aggressively (anything over 7%)</li>' +
+                            '<li>Automate your savings so you pay yourself first</li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<div class="caleb-reality">' +
+                        '<strong>Caleb\'s Reality Check:</strong> You\'re doing better than most people' + stateContext + ', but "most" Americans are broke. The gap between you and the top 25% isn\'t huge - consistency and discipline will get you there in 2-3 years.' + costNote +
+                    '</div>';
+            } else {
+                title.textContent = 'Wake Up Call: You\'re Below Average' + stateContext;
+                content.innerHTML = 
+                    '<div class="rec-section">' +
+                        '<h4>🚨 Emergency Actions (Master Your Budget System):</h4>' +
+                        '<ul class="rec-list">' +
+                            '<li>Start tracking every expense immediately - you can\'t manage what you don\'t measure</li>' +
+                            '<li>Build $1,000 emergency fund before anything else - sell stuff if you have to</li>' +
+                            '<li>Use the Happiness Test to find easy spending cuts that won\'t hurt your quality of life</li>' +
+                            '<li>Consider income increases: side hustles, job switching, skill development</li>' +
+                            '<li>Cut ALL unnecessary subscriptions and memberships</li>' +
+                        '</ul>' +
+                    '</div>' +
+                    '<div class="caleb-reality">' +
+                        '<strong>The Brutal Truth:</strong> You\'re falling behind your peers' + stateContext + '. Every month you delay action costs you compound growth and keeps you trapped in the paycheck-to-paycheck cycle.' + costNote +
+                    '</div>' +
+                    '<div class="rec-section">' +
+                        '<h4>💪 But Here\'s the Hope:</h4>' +
+                        '<p>The gap between financial struggle and stability is smaller than you think. Most people' + stateContext + ' never learn proper budgeting. Master Your Budget gives you the exact system to escape average - the same one that\'s helped thousands get out of debt and build wealth.</p>' +
+                    '</div>';
+            }
+        }
+    </script>
+</body>
+</html>
